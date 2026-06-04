@@ -79,10 +79,10 @@
 </button>
 
 <a-scene
-  mindar-image="imageTargetSrc: ./brief.mind;"
+  mindar-image="imageTargetSrc: ./brief.mind; filterMinCF: 0.0001; filterBeta: 0.001;"
   embedded
   color-space="sRGB"
-  renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true"
+  renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true; antialias: true"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: true">
 
@@ -111,10 +111,10 @@
 
     <a-video
       src="#arvideo"
-      width="1"
-      height="1.4"
-      position="0 0 0.05"
-      material="transparent: true; opacity: 0.65; side: double;">
+      width="0.9"
+      height="1.25"
+      position="0 0 0.02"
+      material="shader: flat; transparent: true; opacity: 1; side: double; toneMapped: false;">
     </a-video>
 
   </a-entity>
@@ -128,6 +128,8 @@
 
   startButton.addEventListener("click", async () => {
     try {
+      video.muted = true;
+      video.playsInline = true;
       await video.play();
       video.pause();
       startButton.style.display = "none";
