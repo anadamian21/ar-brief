@@ -19,7 +19,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: black;
+      background: transparent;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
@@ -82,10 +82,9 @@
   mindar-image="imageTargetSrc: ./brief.mind;"
   embedded
   color-space="sRGB"
-  renderer="colorManagement: true, physicallyCorrectLights"
+  renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true"
   vr-mode-ui="enabled: false"
-  device-orientation-permission-ui="enabled: true"
->
+  device-orientation-permission-ui="enabled: true">
 
   <a-assets>
 
@@ -114,7 +113,8 @@
       src="#arvideo"
       width="1"
       height="1.4"
-      position="0 0 0.05">
+      position="0 0 0.05"
+      material="transparent: true; opacity: 1;">
     </a-video>
 
   </a-entity>
@@ -138,6 +138,7 @@
 
   target.addEventListener("targetFound", async () => {
     try {
+      video.currentTime = 0;
       await video.play();
       console.log("Video gestartet");
     } catch (e) {
