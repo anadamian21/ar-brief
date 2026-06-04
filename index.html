@@ -33,7 +33,6 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-
       z-index: 999999;
 
       width: 85vw;
@@ -42,7 +41,6 @@
 
       border: none;
       border-radius: 32px;
-
       padding: 25px 35px;
 
       font-size: 34px;
@@ -75,19 +73,18 @@
 <body>
 
 <button id="startButton">
-✨ AR ERLEBEN
+  ✨ AR ERLEBEN
 </button>
 
 <a-scene
-  mindar-image="imageTargetSrc: ./brief.mind; filterMinCF: 0.0001; filterBeta: 0.001;"
+  mindar-image="imageTargetSrc: ./brief.mind; filterMinCF: 0.001; filterBeta: 0.01;"
   embedded
   color-space="sRGB"
-  renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true; antialias: true"
+  renderer="colorManagement: true; alpha: true; antialias: true"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: true">
 
   <a-assets>
-
     <video
       id="arvideo"
       src="./video.mp4"
@@ -99,7 +96,6 @@
       webkit-playsinline
       crossorigin="anonymous">
     </video>
-
   </a-assets>
 
   <a-camera
@@ -111,10 +107,10 @@
 
     <a-video
       src="#arvideo"
-      width="0.9"
-      height="1.25"
-      position="0 0 0.02"
-      material="shader: flat; transparent: true; opacity: 1; side: double; toneMapped: false;">
+      width="1"
+      height="1.4"
+      position="0 0 0.01"
+      material="transparent: true; opacity: 1; side: double;">
     </a-video>
 
   </a-entity>
@@ -126,12 +122,16 @@
   const video = document.getElementById("arvideo");
   const target = document.querySelector("[mindar-image-target]");
 
+  let videoStarted = false;
+
   startButton.addEventListener("click", async () => {
     try {
       video.muted = true;
       video.playsInline = true;
+
       await video.play();
       video.pause();
+
       startButton.style.display = "none";
     } catch (e) {
       console.log(e);
@@ -140,9 +140,14 @@
 
   target.addEventListener("targetFound", async () => {
     try {
-      video.currentTime = 0;
-      await video.play();
-      console.log("Video gestartet");
+      if (!videoStarted) {
+        videoStarted = true;
+        await video.play();
+      } else if (video.paused) {
+        await video.play();
+      }
+
+      console.log("Video läuft");
     } catch (e) {
       console.log(e);
     }
